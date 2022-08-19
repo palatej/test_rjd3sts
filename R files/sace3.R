@@ -7,7 +7,7 @@ bsm_td_periodic<-function(s, tdgroups, period, noisyperiod, contrast = FALSE, in
   # create the components and add them to the model
   add(bsm, locallineartrend("ll"))
   add(bsm, seasonal("s", 12, type="Crude"))
-  add(bsm, td("td", frequency(s), start(s), length(s), tdgroups, contrast, variance = 0, fixed=TRUE))
+  add(bsm, regtd("td", frequency(s), start(s), length(s), tdgroups, contrast, variance = 0, fixed=TRUE))
   add(bsm, noise("n", 1, TRUE))
   if (! is.null(noisyperiod)){
     for (i in 1:length(noisyperiod)){
