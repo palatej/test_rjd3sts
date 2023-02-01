@@ -1,6 +1,5 @@
 library(rjd3sts)
 library(rjd3toolkit)
-library(rjd3modelling)
 
 data<-read.csv("./Data/FR_Births.csv")
 y<-data$births
@@ -10,21 +9,22 @@ y<-data$births
 # build the calendar
 
 # Create holidays. See also testholidays.R for other examples and for weekly variables.
-jhol<-calendar.new()
-calendar.holiday(jhol, "NEWYEAR")
-calendar.holiday(jhol, "EASTERMONDAY")
-calendar.holiday(jhol, "MAYDAY")
-calendar.holiday(jhol, "ASCENSION")
-calendar.holiday(jhol, "WHITMONDAY")
-calendar.fixedday(jhol, month=5, day=8)
-calendar.fixedday(jhol, month=7, day=14)
-calendar.holiday(jhol, "ASSUMPTION")
-calendar.holiday(jhol, "ALLSAINTSDAY")
-calendar.holiday(jhol, "ARMISTICE")
-calendar.holiday(jhol, "CHRISTMAS")
+FR <- national_calendar(list(
+  fixed_day(7,14),
+  fixed_day(5,8),
+  special_day('NEWYEAR'),
+  special_day('CHRISTMAS'),
+  special_day('MAYDAY'),
+  special_day('EASTERMONDAY'),
+  special_day('ASCENSION'),
+  special_day('WHITMONDAY'),
+  special_day('ASSUMPTION'),
+  special_day('ALLSAINTSDAY'),
+  special_day('ARMISTICE')
+  ))
 
 
-hol<-rjd3modelling::holidays(jhol, "1968-01-01", 
+hol<-holidays(FR, "1968-01-01", 
                              length = length(y), type = "Skip")
 #hol<-rjd3modelling::holidays(jhol, "1996-01-01", 
 #                             length = length(y), type = "Skip")
