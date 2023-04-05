@@ -7,7 +7,7 @@ bsm_td_periodic<-function(s, tdgroups, period, noisyperiod, contrast = FALSE, in
   # create the components and add them to the model
   add(bsm, locallineartrend("ll"))
   add(bsm, seasonal("s", 12, type="Crude"))
-  add(bsm, regtd("td", frequency(s), start(s), length(s), tdgroups, contrast, variance = 0, fixed=TRUE))
+  add(bsm, reg_td("td", frequency(s), start(s), length(s), tdgroups, contrast, variance = 0, fixed=TRUE))
   add(bsm, noise("n", 1, TRUE))
   if (! is.null(noisyperiod)){
     for (i in 1:length(noisyperiod)){
@@ -16,13 +16,13 @@ bsm_td_periodic<-function(s, tdgroups, period, noisyperiod, contrast = FALSE, in
   }
   # create the equation (fix the variance to 1)
   eq<-equation("eq", 0, TRUE)
-  add.equation(eq, "ll")
-  add.equation(eq, "s")
-  add.equation(eq, "td")
-  add.equation(eq, "n")
+  add_equation(eq, "ll")
+  add_equation(eq, "s")
+  add_equation(eq, "td")
+  add_equation(eq, "n")
   if (! is.null(noisyperiod)){
     for (i in 1:length(noisyperiod)){
-      add.equation(eq,paste("pn", i, sep=""), 1, TRUE, loading_periodic(period, noisyperiod[i]))
+      add_equation(eq,paste("pn", i, sep=""), 1, TRUE, loading_periodic(period, noisyperiod[i]))
     }
   }
   add(bsm, eq)

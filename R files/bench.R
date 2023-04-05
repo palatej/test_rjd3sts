@@ -14,7 +14,7 @@ model<-model()
 add(model, c)
 
 eq<-equation("eq")
-add.equation(eq, "c")
+add_equation(eq, "c")
 
 add(model, eq)
 
@@ -38,7 +38,7 @@ plot(et2, type='l')
 x<-rep(1,n)
 x[c(18,205)]<-2.5
 
-vreg<-varreg("x", rjd3toolkit::retail$RetailAndFoodServicesSalesTotal, x, scale=1, fixed=T)
+vreg<-var_reg("x", rjd3toolkit::retail$RetailAndFoodServicesSalesTotal, x, scale=1, fixed=T)
 #all<-aggregation("m", list(reg, stoch))
 vc<-cumul("c", vreg, 12)
 
@@ -46,7 +46,7 @@ vmodel<-model()
 add(vmodel, vc)
 
 veq<-equation("eq")
-add.equation(veq, "c")
+add_equation(veq, "c")
 
 add(vmodel, veq)
 

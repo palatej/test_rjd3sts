@@ -35,8 +35,8 @@ eq<-equation("eq")
 # create the components and add them to the model
 add(sm, sarima("airline", 7, c(0,1,1), c(0,1,1)))
 add(sm, reg("cal", hol, 0.1))
-add.equation(eq, "airline")
-add.equation(eq, "cal")
+add_equation(eq, "airline")
+add_equation(eq, "cal")
 add(sm, eq)
 #estimate the model
 rslt<-estimate(sm, log(y), marginal=F, initialization="SqrtDiffuse",
