@@ -5,70 +5,75 @@ load("./Data/ABS.rda")
 
 s<-log(retail$BookStores)
 
-# create the model
-bsm<-model()
-# create the components and add them to the model
-add(bsm, locallineartrend("ll"))
-add(bsm, seasonal("s", 12, type="HarrisonStevens"))
-add(bsm, noise("n"))
-# create the equation (fix the variance to 1)
-eq<-equation("eq", 0, TRUE)
-add_equation(eq, "ll")
-add_equation(eq, "s")
-add_equation(eq, "n")
-add(bsm, eq)
-rslt<-estimate(bsm, log(s), marginal=T)
+fn1<-function(s){
+  # create the model
+  bsm<-model()
+  # create the components and add them to the model
+  add(bsm, locallineartrend("ll"))
+  add(bsm, seasonal("s", 12, type="HarrisonStevens"))
+  add(bsm, noise("n"))
+  rslt<-estimate(bsm, log(s), marginal=T)
+  return (rslt)
+}
+
+rslt<-fn1(s)
 print(result(rslt, "likelihood.ll"))
 print(result(rslt, "parameters"))
 
 # create the model
-bsm3<-model()
-# create the components and add them to the model
-add(bsm3, locallineartrend("ll"))
-add(bsm3, seasonal("s", 12, type="HarrisonStevens",1, T))
-# create the equation (fix the variance to 1)
-eq<-equation("eq", 1,T)
-add_equation(eq, "ll")
-add_equation(eq, "s", .1,F)
-add(bsm3, eq)
-rslt<-estimate(bsm3, log(s), marginal=T)
+fn2<-function(s){
+  bsm3<-model()
+  # create the components and add them to the model
+  add(bsm3, locallineartrend("ll"))
+  add(bsm3, seasonal("s", 12, type="HarrisonStevens",1, T))
+  # create the equation (fix the variance to 1)
+  eq<-equation("eq", 1,T)
+  add_equation(eq, "ll")
+  add_equation(eq, "s", .1,F)
+  add(bsm3, eq)
+  rslt<-estimate(bsm3, log(s), marginal=T)
+  return (rslt)
+}
+rslt<-fn2(s)
 print(result(rslt, "likelihood.ll"))
 print(result(rslt, "parameters"))
 
 # create the model
-bsm2<-model()
-# create the components and add them to the model
-add(bsm2, locallineartrend("ll", 
-     levelVariance = 1, fixedLevelVariance = TRUE) )
-add(bsm2, seasonal("s", 12, type="HarrisonStevens", 
-     variance = 1, fixed = TRUE))
-add(bsm2, noise("n", 1, fixed=TRUE))
-# create the equation (fix the variance to 1)
-eq2<-equation("eq", 0, TRUE)
-add_equation(eq2, "ll", .01, FALSE)
-add_equation(eq2, "s", .01, FALSE)
-add_equation(eq2, "n")
-add(bsm2, eq2)
-rslt2<-estimate(bsm2, log(s), marginal=TRUE)
+fn3<-function(s){
+  bsm2<-model()
+  # create the components and add them to the model
+  add(bsm2, locallineartrend("ll", 
+                             levelVariance = 1, fixedLevelVariance = TRUE) )
+  add(bsm2, seasonal("s", 12, type="HarrisonStevens", 
+                     variance = 1, fixed = TRUE))
+  add(bsm2, noise("n", 1, fixed=TRUE))
+  # create the equation (fix the variance to 1)
+  eq2<-equation("eq", 0, TRUE)
+  add_equation(eq2, "ll", .01, FALSE)
+  add_equation(eq2, "s", .01, FALSE)
+  add_equation(eq2, "n")
+  add(bsm2, eq2)
+  rslt2<-estimate(bsm2, log(s), marginal=TRUE)
+  return (rslt2)
+}
+rslt2<-fn3(s)
 print(result(rslt2, "likelihood.ll"))
 print(result(rslt2, "parameters"))
 
 # create the model
-bsm3<-model()
-# create the components and add them to the model
-add(bsm3, locallevel("l", initial = 0) )
-add(bsm3, locallineartrend("lt", levelVariance = 0, 
-                                   fixedLevelVariance = TRUE) )
-add(bsm3, seasonal("s", 12, type="HarrisonStevens"))
-add(bsm3, noise("n", 1, fixed=TRUE))
-# create the equation (fix the variance to 1)
-eq3<-equation("eq", 0, TRUE)
-add_equation(eq3, "l")
-add_equation(eq3, "lt")
-add_equation(eq3, "s")
-add_equation(eq3, "n")
-add(bsm3, eq3)
-rslt3<-estimate(bsm3, log(s), marginal=TRUE)
+fn4<-function(s){
+  bsm3<-model()
+  # create the components and add them to the model
+  add(bsm3, locallevel("l", initial = 0) )
+  add(bsm3, locallineartrend("lt", levelVariance = 0, 
+                             fixedLevelVariance = TRUE) )
+  add(bsm3, seasonal("s", 12, type="HarrisonStevens"))
+  add(bsm3, noise("n", 1, fixed=TRUE))
+  # create the equation (fix the variance to 1)
+  rslt3<-estimate(bsm3, log(s), marginal=TRUE)
+  return (rslt3)
+}
+rslt3<-fn4(s)
 print(result(rslt3, "likelihood.ll"))
 print(result(rslt3, "parameters"))
 
@@ -112,11 +117,6 @@ ll2<-function(s, l){
                              variance = abs(l*l*l), fixed = TRUE))
   add(bsm2, noise("n", 0.000143, fixed=TRUE))
   # create the equation (fix the variance to 1)
-  eq2<-equation("eq", 0, TRUE)
-  add_equation(eq2, "ll")
-  add_equation(eq2, "s")
-  add_equation(eq2, "n")
-  add(bsm2, eq2)
   rslt2<-estimate(bsm2, log(s), marginal=FALSE)
   return( result(rslt2, "likelihood.ll"))
 }

@@ -13,7 +13,8 @@ bsm_td<-function(s, tdgroups, contrast = FALSE){
   # create the components and add them to the model
   add(bsm, locallineartrend("ll"))
   add(bsm, seasonal("s", 12, type="HarrisonStevens"))
-  add(bsm, reg_td("td", frequency(s), start(s), length(s), tdgroups, contrast, variance = .0001, fixed=FALSE))
+  vtd<-reg_td("td", frequency(s), start(s), length(s), tdgroups, contrast, variance = .0001, fixed=FALSE)
+  add(bsm, vtd)
   # create the equation (fix the variance to 1)
   eq<-equation("eq", 1, TRUE)
   add_equation(eq, "ll")
@@ -80,4 +81,4 @@ bsm_td_all<-function(s, contrast = FALSE){
 }
 
 
-bsm_td_all(log(s), T) 
+bsm_td_all(log(s), FALSE) 

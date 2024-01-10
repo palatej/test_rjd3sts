@@ -1,0 +1,115 @@
+---
+title: "BSM"
+output: html_document
+date: "2023-11-02"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Defining a BSM model with rjd3sts
+
+Thie package allows several equivalent definitions of a basic strctural model.
+We present below some of them.
+
+To compare the results (more precisely the likelihood) of the different approaches,
+it is important to compute the marginal likelihood.
+
+#### Standard definition, noise in the state
+
+```{r}
+library(rjd3sts)
+library(rjd3toolkit)
+
+s<-log(retail$BookStores)
+
+# create the model
+bsm<-model()
+# create the components and add them to the model
+add(bsm, locallineartrend("ll"))
+add(bsm, seasonal("s", 12, type="HarrisonStevens"))
+add(bsm, noise("n"))
+rslt<-estimate(bsm, log(s), marginal=T)
+
+print(result(rslt, "likelihood.ll"))
+print(result(rslt, "parameters"))
+
+
+```
+#### Standard definition, noise in the measurement
+
+```{r}
+
+# create the model
+bsm<-model()
+# create the components and add them to the model
+add(bsm, locallineartrend("ll"))
+add(bsm, seasonal("s", 12, type="HarrisonStevens"))
+  # create the equation (fix the variance to 1)
+eq<-equation("eq", 1,T)
+add_equation(eq, "ll")
+add_equation(eq, "s")
+add(bsm, eq)
+rslt<-estimate(bsm, log(s), marginal=T)
+
+print(result(rslt, "likelihood.ll"))
+print(result(rslt, "parameters"))
+
+
+```
+#### components with fixed variances, aggregated with diffuse weights (noise in the state)
+
+```{r}
+
+# create the model
+bsm<-model()
+  # create the components, with fixed variances, and add them to the model
+add(bsm, locallineartrend("ll", 
+                             levelVariance = 1, fixedLevelVariance = TRUE) )
+add(bsm, seasonal("s", 12, type="HarrisonStevens", 
+                     variance = 1, fixed = TRUE))
+add(bsm, noise("n", 1, fixed=TRUE))
+  # create the equation (fix the variance to 1)
+eq<-equation("eq", 0, TRUE)
+add_equation(eq, "ll", .01, FALSE)
+add_equation(eq, "s", .01, FALSE)
+add_equation(eq, "n")
+add(bsm, eq)
+rslt<-estimate(bsm, log(s), marginal=TRUE)
+
+print(result(rslt, "likelihood.ll"))
+p<-result(rslt, "parameters")
+print(p)
+
+cat ('to be noted:')
+
+cat ('p[5]*p[5]=l-var=', p[5]*p[5])
+cat ('p[5]*p[5]*p[2]=slope-var=', p[5]*p[5]*p[2])
+cat ('p[6]*p[6]=s-var=', p[6]*p[6])
+
+```
+
+#### bsm with long term trend and cycle
+
+```{r}
+
+# create the model
+bsm<-model()
+  # create the components and add them to the model
+add(bsm, locallevel("l", initial = 0) )
+add(bsm, locallineartrend("lt", levelVariance = 0, 
+                             fixedLevelVariance = TRUE) )
+add(bsm, seasonal("s", 12, type="HarrisonStevens"))
+add(bsm, noise("n", 1, fixed=TRUE))
+  # create the equation (fix the variance to 1)
+rslt<-estimate(bsm, log(s), marginal=TRUE)
+
+print(result(rslt, "likelihood.ll"))
+print(result(rslt, "parameters"))
+
+ss<-smoothed_states(rslt)
+plot(ss[,1]+ss[,2], type='l', col='blue', ylab='trends')
+lines(ss[, 2], col='red')
+
+```

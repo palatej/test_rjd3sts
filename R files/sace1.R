@@ -47,30 +47,11 @@ airline<-model()
 # create the components and add them to the model
 add(airline, sarima("air", 12, c(0,1,1), c(0,1,1), fixedvariance = FALSE) )
 add(airline, reg_td("td", frequency(s), start(s), length(s), c(1,1,1,1,2,3,0)))
-# create the equation (fix the variance to 0)
-eq<-equation("eq", 0, TRUE)
-add_equation(eq, "air")
-add_equation(eq, "td")
-add(airline, eq)
 #estimate the model
-arslt<-estimate(airline, log(s), marginal=T, concentrated=T)
+arslt<-estimate(airline, log(s), marginal=F, concentrated=T)
 print(result(arslt, "parameters"))
 ass<-result(arslt, "ssf.smoothing.states")
 plot(-(4*ass[,15]+ass[,16]+ass[,17]), type="l", ylim=c(-0.035,0))
-# create the model
-airline<-model()
-# create the components and add them to the model
-add(airline, sarima("air", 12, c(0,1,1), c(0,1,1), fixedvariance = FALSE) )
-add(airline, reg_td("td", frequency(s), start(s), length(s), c(1,1,1,1,2,3,0)))
-# create the equation (fix the variance to 0)
-eq<-equation("eq", 0, TRUE)
-add_equation(eq, "air")
-add_equation(eq, "td")
-add(airline, eq)
-arslt<-estimate(airline, log(s), marginal=T, concentrated=F)
-print(result(arslt, "parameters"))
-afs<-result(arslt, "ssf.smoothing.states")
-lines(-(4*afs[,15]+afs[,16]+afs[,17]), type="l", ylim=c(-0.035,0), col="red")
 
 
 

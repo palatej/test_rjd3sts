@@ -16,3 +16,42 @@ sugar<-ts(data, freq=12, start=c(1974,1))
 q<-rjd3sts::seasonalbreaks(sugar)
 
 plot(q)
+
+model<-rjd3sts::model()
+llt<-rjd3sts::locallineartrend('l')
+seas1<-rjd3sts::seasonal("s1", 12, "HarrisonStevens")
+n1<-rjd3sts::noise('n1')
+seas2<-rjd3sts::seasonal("s2", 12, "HarrisonStevens")
+#n2<-rjd3sts::noise('n2')
+rjd3sts::add(model, llt)
+rjd3sts::add(model, seas1)
+rjd3sts::add(model, n1)
+rjd3sts::add(model, seas2)
+#rjd3sts::add(model, n2)
+eq1<-rjd3sts::equation("eq1")
+eq2<-rjd3sts::equation("eq2")
+rjd3sts::add_equation(eq1, 'l')
+rjd3sts::add_equation(eq1, 's1')
+rjd3sts::add_equation(eq1, 'n1')
+rjd3sts::add_equation(eq2, 'l')
+rjd3sts::add_equation(eq2, 's2')
+rjd3sts::add_equation(eq2, 'n1')
+rjd3sts::add(model, eq1)
+rjd3sts::add(model, eq2)
+
+i<-which.max(q)
+m<-cbind(data, data)
+m[i:length(data),1]<-NaN
+m[1:(i-1),2]<-NaN
+rslt<-rjd3sts::estimate(model, log(m))
+ss<-rjd3sts::smoothed_states(rslt)
+plot(log(data), type='l')
+lines(ss[,1], col='red')
+s1=ss[,3]
+s2=ss[,15]
+s1[i:length(data)]<-NaN
+s2[1:(i-1)]<-NaN
+seas<-cbind(s1, s2)
+matplot(seas, col=c('red', 'blue'), type='l')
+plot(ss[,3], type='l', col='blue')
+lines(ss[,15], col='red')

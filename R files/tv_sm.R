@@ -36,11 +36,6 @@ add(sm, noise("n"))
 add(sm, seasonal("s", 7, type='HarrisonStevens'))
 add(sm, locallineartrend("ll"))
 add(sm, reg("cal", hol, 0.1))
-add_equation(eq, "n")
-add_equation(eq, "ll")
-add_equation(eq, "s")
-add_equation(eq, "cal")
-add(sm, eq)
 #estimate the model
 rslt<-estimate(sm, log(y), marginal=F, initialization="SqrtDiffuse",
                optimizer="LevenbergMarquardt", 

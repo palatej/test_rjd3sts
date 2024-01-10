@@ -9,10 +9,6 @@ sm_week<-function(y, seasonal="HarrisonStevens"){
   add(sm, noise("n"))
   add(sm, seasonal("s", 7, type=seasonal))
   add(sm, locallineartrend("ll"))
-  add_equation(eq, "n")
-  add_equation(eq, "ll")
-  add_equation(eq, "s")
-  add(sm, eq)
   #estimate the model
   rslt<-estimate(sm, y, marginal=F, initialization="SqrtDiffuse", optimizer="LevenbergMarquardt", concentrated=TRUE, precision = 1e-10)
   return(rslt)
