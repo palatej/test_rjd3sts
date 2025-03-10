@@ -14,6 +14,7 @@ data<-c(34.8,21,32.2,22.4,18.2,15.9,13.3,16.7,19,91.5,246.5,258.3,126.5,19.7,24.
 sugar<-ts(data, freq=12, start=c(1974,1))
 
 q<-rjd3sts::seasonalbreaks(sugar)
+  
 
 plot(q)
 

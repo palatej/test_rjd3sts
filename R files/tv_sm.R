@@ -3,9 +3,6 @@ library(rjd3toolkit)
 
 data<-read.csv("./Data/FR_Births.csv")
 y<-data$births
-#data<-read.csv("./Data/edf.csv")
-#y<-data$Electricity
-
 
 # build the calendar
 
@@ -32,29 +29,40 @@ hol<-holidays(FR, "1968-01-01",
 sm<-model()
 eq<-equation("eq")
 # create the components and add them to the model
-add(sm, noise("n"))
-add(sm, seasonal("s", 7, type='HarrisonStevens'))
-add(sm, locallineartrend("ll"))
 add(sm, reg("cal", hol, 0.1))
+add(sm, locallineartrend("ll"))
+add(sm, splines_regular('y', 365.25, nnodes=6))
+add(sm, seasonal("s", 7, type='HarrisonStevens'))
+add(sm, noise("n"))
 #estimate the model
-rslt<-estimate(sm, log(y), marginal=F, initialization="SqrtDiffuse",
-               optimizer="LevenbergMarquardt", 
-               concentrated=TRUE, precision = 1e-10)
+rslt<-estimate(sm, log(y))
+print(result(rslt, "likelihood.ll"))
 
-fs<-result(rslt, "ssf.filtered.states")
 ss<-result(rslt, "ssf.smoothing.states")
 
 colfunc<-colorRampPalette(c("red","blue","green","#196F3D"))
 colors <- (colfunc(12))
-plot(ss[,10], type='l', col=colors[1], ylim=c(-0.4, 0.05))
-lines(ss[,11], col=colors[2])
-lines(ss[,12], col=colors[3])
-lines(ss[,13], col=colors[4])
-lines(ss[,14], col=colors[5])
-lines(ss[,15], col=colors[6])
-lines(ss[,16], col=colors[7])
-lines(ss[,17], col=colors[8])
-lines(ss[,18], col=colors[9])
-lines(ss[,19], col=colors[10])
-lines(ss[,20], col=colors[11])
+plot(ss[,1], type='l', col=colors[1], ylim=c(-0.4, 0.05))
+lines(ss[,2], col=colors[2])
+lines(ss[,3], col=colors[3])
+lines(ss[,4], col=colors[4])
+lines(ss[,5], col=colors[5])
+lines(ss[,6], col=colors[6])
+lines(ss[,7], col=colors[7])
+lines(ss[,8], col=colors[8])
+lines(ss[,9], col=colors[9])
+lines(ss[,10], col=colors[10])
+lines(ss[,11], col=colors[11])
+
+cmps<-smoothed_components(rslt)
+plot(ylim=c(-0.45, 0.1),cmps[,4], type='l', col='gray')
+lines(cmps[,1], col='blue')
+lines(cmps[,3], col='red')
+
+start=32*365+8
+range<-start:(start+367)
+cmps<-smoothed_components(rslt)
+plot(ylim=c(-0.45, 0.1),cmps[range,4], type='l', col='gray')
+lines(cmps[range,1], col='blue')
+lines(cmps[range,3], col='red')
 
