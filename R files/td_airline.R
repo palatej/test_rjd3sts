@@ -17,3 +17,4 @@ plot(tdss[,2], type='l', col='red')
 lines(ss[,2], col='gray')
 
 plot(tdss[,2]-ss[,2], type='l')
+
