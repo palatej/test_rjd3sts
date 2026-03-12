@@ -1,9 +1,7 @@
 library(rjd3sts)
 library(rjd3toolkit)
-load("./Data/retail.rda")
-load("./Data/ABS.rda")
 
-s<-log(retail$BookStores)
+s<-log(Retail$BookStores)
 
 fn1<-function(s){
   # create the model

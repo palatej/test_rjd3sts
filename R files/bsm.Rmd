@@ -10,11 +10,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### Defining a BSM model with rjd3sts
 
-Thie package allows several equivalent definitions of a basic strctural model.
-We present below some of them.
+Thie package allows several equivalent definitions of a basic strctural model. We present below some of them.
 
-To compare the results (more precisely the likelihood) of the different approaches,
-it is important to compute the marginal likelihood.
+To compare the results (more precisely the likelihood) of the different approaches, it is important to compute the marginal likelihood.
 
 #### Standard definition, noise in the state
 
@@ -22,7 +20,7 @@ it is important to compute the marginal likelihood.
 library(rjd3sts)
 library(rjd3toolkit)
 
-s<-log(retail$BookStores)
+s<-log(Retail$BookStores)
 
 # create the model
 bsm<-model()
@@ -37,6 +35,7 @@ print(result(rslt, "parameters"))
 
 
 ```
+
 #### Standard definition, noise in the measurement
 
 ```{r}
@@ -58,6 +57,7 @@ print(result(rslt, "parameters"))
 
 
 ```
+
 #### components with fixed variances, aggregated with diffuse weights (noise in the state)
 
 ```{r}

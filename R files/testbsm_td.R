@@ -1,10 +1,6 @@
 library(rjd3toolkit)
 library(rjd3sts)
 
-
-load("./Data/retail.rda")
-load("./Data/ABS.rda")
-
 s<-ABS$X0.2.20.10.M
 
 bsm_td<-function(s, tdgroups, contrast = FALSE){

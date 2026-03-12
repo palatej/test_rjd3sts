@@ -1,8 +1,6 @@
 library(rjd3sts)
 library(rjd3toolkit)
 
-load("./Data/ABS.rda")
-
 s<-rjd3toolkit::ABS$X0.2.20.10.M
 
 # create the model

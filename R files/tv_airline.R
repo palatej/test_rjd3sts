@@ -57,3 +57,4 @@ lines(ss[,18], col=colors[9])
 lines(ss[,19], col=colors[10])
 lines(ss[,20], col=colors[11])
 
+matplot(ss[, 10:20], type='l')

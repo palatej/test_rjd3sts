@@ -1,4 +1,4 @@
-s<-log(rjd3toolkit::retail$RetailAndFoodServicesSalesTotal)
+s<-log(rjd3toolkit::Retail$RetailAndFoodServicesSalesTotal)
 
 # creates an airline model
 airline<-function(period, th, bth){
@@ -21,10 +21,10 @@ tvdecomp<-function(s, period=12, ths, bths){
   sapply(1:length(s), function(idx){.tvdecomp(s,idx,period,ths[idx], bths[idx])})  
 }
 
-est<-rjd3toolkitx::tdairline_estimation(s)
+est<-rjd3sts::tdairline_estimation(s)
 
 w<-t(tvdecomp(s, 12, est$ltd_sarima$th, est$ltd_sarima$bth))
-wkf<-rjd3toolkitx::tdairline_decomposition(s, est$ltd_sarima$th, est$ltd_sarima$bth)
+wkf<-rjd3sts::tdairline_decomposition(s, est$ltd_sarima$th, est$ltd_sarima$bth)
 
 idx<-3
 plot(w[,idx]-wkf[,idx], type='l')

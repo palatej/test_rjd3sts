@@ -32,7 +32,7 @@ bsm_td_periodic<-function(s, tdgroups, period, noisyperiod, contrast = FALSE, in
 
 }
 
-q<-bsm_td_periodic(log(retail$BookStores), c(1,1,1,1,2,3,0),12,c(1))
+q<-bsm_td_periodic(log(Retail$BookStores), c(1,1,1,1,2,3,0),12,c(1))
 ss<-result(q, "ssf.smoothing.states")
 
 plot(ss[,17]+ss[,18], type="l")

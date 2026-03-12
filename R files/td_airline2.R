@@ -1,4 +1,4 @@
-s<-log(rjd3toolkit::retail$RetailAndFoodServicesSalesTotal)
+s<-log(rjd3toolkit::Retail$RetailAndFoodServicesSalesTotal)
 
 # create the model
 sm<-rjd3sts::model()

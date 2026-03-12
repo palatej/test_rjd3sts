@@ -7,7 +7,7 @@ period=365.25/7
 
 model<-rjd3sts::model()
 ll<-rjd3sts::locallevel('l')
-seas<-rjd3sts::splines_regular('s', period, nnodes=52)
+seas<-rjd3sts::splines_regular('s', period, nknots =52)
 n<-rjd3sts::noise('n')
 rjd3sts::add(model, ll)
 rjd3sts::add(model, seas)
@@ -20,7 +20,7 @@ m1<-rjd3sts::smoothed_components(rslt)
 plot(idx, m1[idx, 2], "l")
 
 model<-rjd3sts::model()
-seas2<-rjd3sts::splines_regular('s', period, nnodes=35)
+seas2<-rjd3sts::splines_regular('s', period, nknots=35)
 rjd3sts::add(model, ll)
 rjd3sts::add(model, seas2)
 rjd3sts::add(model, n)

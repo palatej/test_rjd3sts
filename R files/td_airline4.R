@@ -1,9 +1,9 @@
 test<-function(z){
-  q<-rjd3toolkitx::tdairline_estimation(z)
+  q<-rjd3sts::tdairline_estimation(z)
   return (q$ltd_sarima$likelihood- q$sarima$likelihood)
 }
 
-all<-sapply(rjd3toolkit::retail, function(z) test(z))
+all<-sapply(rjd3toolkit::Retail, function(z) test(z))
 
-hist(all)
+hist(all, breaks=10)
 print(all)
