@@ -44,7 +44,7 @@ bsm2<-function(s, method="L-BFGS-B"){
 ptm <- proc.time()
 
 # Loop 
-for (i in 1:50){
+for (i in 1:20){
   jd3a<-bsm0(log(rjd3toolkit::ABS$X0.2.06.10.M))
 }
 
@@ -57,7 +57,7 @@ print(proc.time() - ptm)
 ptm <- proc.time()
 
 # Loop 
-for (i in 1:50){
+for (i in 1:20){
   kfasa<-bsm1(log(rjd3toolkit::ABS$X0.2.06.10.M))
 }
 
@@ -69,7 +69,7 @@ print(proc.time() - ptm)
 ptm <- proc.time()
 
 # Loop 
-for (i in 1:50){
+for (i in 1:20){
   kfas2<-bsm2(log(rjd3toolkit::ABS$X0.2.06.10.M))
 }
 

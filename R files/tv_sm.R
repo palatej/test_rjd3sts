@@ -31,7 +31,9 @@ eq<-equation("eq")
 # create the components and add them to the model
 add(sm, reg("cal", hol, 0.1))
 add(sm, locallineartrend("ll"))
-add(sm, splines_regular('y', 365.25, nknots = 6))
+# harmonics 1 to 10
+add(sm, periodic('y', 365.25, 1:10))
+#add(sm, splines_regular('y', 365.25, nknots = 6))
 add(sm, seasonal("s", 7, type='HarrisonStevens'))
 add(sm, noise("n"))
 #estimate the model
